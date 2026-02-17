@@ -33,13 +33,15 @@ const QUOTES = [
 ];
 
 /**
- * Returns a quote that changes once per calendar day.
+ * Returns a quote that changes once per calendar day (EST).
  * Uses the day-of-year to deterministically pick a quote.
  */
 export function getDailyQuote(): { text: string; author: string } {
-  const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 0);
-  const diff = now.getTime() - start.getTime();
-  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  // Get current date in EST
+  const estDateStr = new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+  const [year, month, day] = estDateStr.split("-").map(Number);
+  const start = new Date(year, 0, 0);
+  const target = new Date(year, month - 1, day);
+  const dayOfYear = Math.floor((target.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
   return QUOTES[dayOfYear % QUOTES.length];
 }

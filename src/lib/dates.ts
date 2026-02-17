@@ -1,37 +1,51 @@
+const TIMEZONE = "America/New_York";
+
+/**
+ * Get the current date string (YYYY-MM-DD) in EST/EDT.
+ */
 export function todayDateString(): string {
-  return new Date().toISOString().split("T")[0];
+  return new Date().toLocaleDateString("en-CA", { timeZone: TIMEZONE });
+}
+
+/**
+ * Get a Date object representing the start of today in EST/EDT.
+ * Returns a UTC Date set to midnight of today's EST date.
+ */
+export function getStartOfToday(): Date {
+  const dateStr = todayDateString();
+  return new Date(dateStr + "T00:00:00.000Z");
 }
 
 export function toDateOnly(date: Date): Date {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
+  const dateStr = date.toISOString().split("T")[0];
+  return new Date(dateStr + "T00:00:00.000Z");
 }
 
 export function formatDate(date: Date, style: "short" | "long" = "short"): string {
   if (style === "long") {
-    return date.toLocaleDateString("en-US", {
+    return new Date(date.toISOString().split("T")[0] + "T12:00:00").toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
       day: "numeric",
+      timeZone: "UTC",
     });
   }
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return new Date(date.toISOString().split("T")[0] + "T12:00:00").toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export function formatDateShort(date: Date): string {
-  return date.toLocaleDateString("en-US", { weekday: "short" });
+  return new Date(date.toISOString().split("T")[0] + "T12:00:00").toLocaleDateString("en-US", {
+    weekday: "short",
+    timeZone: "UTC",
+  });
 }
 
 export function daysAgo(n: number): Date {
-  const d = new Date();
-  d.setDate(d.getDate() - n);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-export function getStartOfToday(): Date {
-  const d = new Date();
-  d.setHours(0, 0, 0, 0);
-  return d;
+  const today = getStartOfToday();
+  today.setDate(today.getDate() - n);
+  return today;
 }
