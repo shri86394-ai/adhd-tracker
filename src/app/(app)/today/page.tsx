@@ -27,6 +27,11 @@ export default async function TodayPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-6">
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold">Today&apos;s Summary</h1>
+        <p className="text-muted-foreground">{formatDate(today, "long")}</p>
+      </div>
+
       {/* Daily quote */}
       <div className="mb-6 rounded-2xl border bg-card p-4">
         <Quote className="mb-2 h-5 w-5 text-primary/60" />
@@ -38,10 +43,6 @@ export default async function TodayPage() {
         </p>
       </div>
 
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Today&apos;s Summary</h1>
-        <p className="text-muted-foreground">{formatDate(today, "long")}</p>
-      </div>
       <SummaryGrid entry={entry} />
     </div>
   );
