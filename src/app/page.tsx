@@ -5,11 +5,16 @@ import { getStartOfToday } from "@/lib/dates";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const today = getStartOfToday();
+  let entry = null;
 
-  const entry = await prisma.dailyEntry.findUnique({
-    where: { date: today },
-  });
+  try {
+    const today = getStartOfToday();
+    entry = await prisma.dailyEntry.findUnique({
+      where: { date: today },
+    });
+  } catch {
+    // DB unavailable — fall through to redirect to checkin
+  }
 
   if (entry) {
     redirect("/today");

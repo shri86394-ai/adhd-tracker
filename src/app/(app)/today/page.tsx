@@ -7,10 +7,15 @@ export const dynamic = "force-dynamic";
 
 export default async function TodayPage() {
   const today = getStartOfToday();
+  let entry = null;
 
-  const entry = await prisma.dailyEntry.findUnique({
-    where: { date: today },
-  });
+  try {
+    entry = await prisma.dailyEntry.findUnique({
+      where: { date: today },
+    });
+  } catch {
+    // DB unavailable — redirect to checkin
+  }
 
   if (!entry) {
     redirect("/checkin");
