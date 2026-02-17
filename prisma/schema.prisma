@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model DailyEntry {
+  id         String   @id @default(cuid())
+  date       DateTime @unique @db.Date
+  waterCups  Int      @default(0) @map("water_cups")
+  coffeeCups Int      @default(0) @map("coffee_cups")
+  sleepHours Int      @default(0) @map("sleep_hours")
+  alcohol    Boolean  @default(false)
+  exercise   Boolean  @default(false)
+  meditation Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("daily_entries")
+}
