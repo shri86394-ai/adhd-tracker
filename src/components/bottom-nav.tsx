@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ClipboardCheck, CalendarDays, BarChart3 } from "lucide-react";
+import { ClipboardCheck, CalendarDays, BarChart3, ListTodo } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/checkin", label: "Check-in", icon: ClipboardCheck },
   { href: "/today", label: "Today", icon: CalendarDays },
+  { href: "/todos", label: "Todos", icon: ListTodo },
   { href: "/stats", label: "Stats", icon: BarChart3 },
 ];
 
