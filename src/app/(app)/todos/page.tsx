@@ -88,7 +88,7 @@ export default function TodosPage() {
   return (
     <div className="mx-auto max-w-lg px-4 py-6">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold">Todos</h1>
+        <h1 className="text-2xl font-bold">To Do</h1>
         <p className="text-muted-foreground">{formatDate(today, "long")}</p>
       </div>
 
