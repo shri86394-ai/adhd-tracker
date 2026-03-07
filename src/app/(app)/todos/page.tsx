@@ -3,7 +3,7 @@
 import { useEffect, useState, useOptimistic, useCallback } from "react";
 import { Loader2, ListChecks } from "lucide-react";
 import { formatDate, getStartOfToday } from "@/lib/dates";
-import { getTodos } from "./actions";
+import { getTodos, clearTodos } from "./actions";
 import { TodoInput } from "@/components/todo/todo-input";
 import { TodoItem } from "@/components/todo/todo-item";
 
@@ -28,6 +28,7 @@ export default function TodosPage() {
         | { type: "add"; text: string }
         | { type: "toggle"; id: string }
         | { type: "delete"; id: string }
+        | { type: "clear" }
     ) => {
       switch (action.type) {
         case "add": {
@@ -59,6 +60,8 @@ export default function TodosPage() {
             });
         case "delete":
           return state.filter((t) => t.id !== action.id);
+        case "clear":
+          return [];
         default:
           return state;
       }
@@ -81,15 +84,31 @@ export default function TodosPage() {
     return () => clearInterval(interval);
   }, [fetchTodos]);
 
+  const handleClear = async () => {
+    dispatch({ type: "clear" });
+    await clearTodos();
+    setTodos([]);
+  };
+
   const unchecked = optimisticTodos.filter((t) => !t.completed);
   const checked = optimisticTodos.filter((t) => t.completed);
   const today = getStartOfToday();
 
   return (
     <div className="mx-auto max-w-lg px-4 py-6">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold">To Do</h1>
-        <p className="text-muted-foreground">{formatDate(today, "long")}</p>
+      <div className="mb-4 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">To Do</h1>
+          <p className="text-muted-foreground">{formatDate(today, "long")}</p>
+        </div>
+        {optimisticTodos.length > 0 && (
+          <button
+            onClick={handleClear}
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       <div className="mb-6">

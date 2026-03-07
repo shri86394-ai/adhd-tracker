@@ -70,3 +70,9 @@ export async function deleteTodo(id: string) {
   await prisma.todo.delete({ where: { id } });
   revalidatePath("/todos");
 }
+
+export async function clearTodos() {
+  const today = getStartOfToday();
+  await prisma.todo.deleteMany({ where: { date: today } });
+  revalidatePath("/todos");
+}
